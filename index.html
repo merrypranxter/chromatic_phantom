@@ -1,18 +1,231 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blank Slate</title>
-    <meta name="description" content="A clean starting workspace ready to build from." />
-    <meta property="og:title" content="Blank Slate" />
-    <meta property="og:description" content="A clean starting workspace ready to build from." />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Chromatic Phantom · Living Optical Art</title><meta name="theme-color" content="#080715">
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#f9f2ff;background:#080715;color-scheme:dark;--line:#38334d;--secondary:#beb4d4}
+*{box-sizing:border-box}body{margin:0}button,select,input,textarea{font:inherit;color:inherit}button,select,textarea{border:1px solid var(--line);border-radius:10px;background:#242038}button{cursor:pointer;padding:10px 12px;min-height:38px;font-weight:650}button:disabled{opacity:.4}button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #e597ff;outline-offset:2px}button.primary{background:linear-gradient(115deg,#ef60a8,#6756e6);border-color:#b783f4}button.active{border-color:#e9a0ff;background:#5d387e}header{display:flex;justify-content:space-between;align-items:center;padding:10px 13px;border-bottom:1px solid var(--line);gap:10px}header small{display:block;letter-spacing:.14em;color:var(--secondary);font-size:10px}h1{font-size:clamp(15px,4vw,22px);margin:2px 0;letter-spacing:.1em}header button{font-size:12px}main{max-width:900px;margin:auto;padding:12px}.top,.quick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.top button,.quick button{flex:1;font-size:12px;padding:9px 4px}.stage{background:#03030b;border:1px solid #33304e;border-radius:17px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;min-height:190px;box-shadow:0 11px 50px #0009}.stage canvas{display:block;width:min(100%,calc(65svh * var(--aspect,1)));aspect-ratio:var(--aspect,1);height:auto;touch-action:none;cursor:crosshair}.stamp{position:absolute;top:10px;left:10px;background:#0b0920a8;border-radius:20px;padding:6px 9px;font-size:10px;letter-spacing:.09em;pointer-events:none}.hint{text-align:center;color:var(--secondary);font-size:12px;margin:9px 4px 13px}.tabs{display:flex;gap:5px;overflow-x:auto;position:sticky;top:0;background:#080715;padding:4px 0 9px;z-index:2}.tabs button{font-size:12px;white-space:nowrap;background:#1c1a2f}.tabs button.active{background:#6a4192;border-color:#d69fea}.pane{display:none;background:#151227;border:1px solid var(--line);border-radius:14px;padding:14px}.pane.active{display:block}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}label{font-size:12px;font-weight:650;display:flex;justify-content:space-between;gap:8px}label output{color:#d8bafc;font-variant-numeric:tabular-nums}.control{display:flex;flex-direction:column;gap:7px}.wide{grid-column:1/-1}input[type=range],select,textarea{width:100%}input[type=range]{accent-color:#ef7cca;min-height:24px}select{padding:10px}textarea{padding:10px;min-height:75px}h2{font-size:13px;letter-spacing:.12em;margin:0 0 15px}p{font-size:12px;line-height:1.6;color:var(--secondary)}.swatches{height:21px;display:flex;gap:3px}.swatches span{flex:1;border-radius:4px}.error{display:none;background:#482035;color:#ffd0df;padding:12px;border-radius:8px;margin:10px 0}.status{font-size:12px;color:#b5ffd4;min-height:18px;margin:9px 2px}footer{font-size:11px;color:var(--secondary);border-top:1px solid var(--line);padding:13px 0;margin-top:15px}@media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style></head>
+<body>
+<header><div><small>MATHEMAGICAL · PHASE 01</small><h1>CHROMATIC PHANTOM</h1></div><button id="play">Ⅱ Pause</button></header>
+<main>
+<div class="top"><button class="primary" id="surprise">✦ Surprise Me</button><button id="seed">↻ Reseed</button><button id="undo">↶ Undo</button><button id="redo">↷ Redo</button></div>
+<div class="stage"><canvas id="art" aria-label="Interactive morphing mathematical optical artwork"></canvas><div class="stamp" id="stamp">OPAL MITOSIS</div></div>
+<div id="error" class="error" role="alert"></div>
+<div class="hint">Drag to sculpt the living forms. In Resonance mode, touch to excite the membrane. No glitches, only opalescent weirdness.</div>
+<div class="quick"><button id="png">↓ PNG</button><button id="save">Save</button><button id="load">Restore</button><button id="new">New Design</button></div>
+<div class="tabs" role="tablist">
+<button class="active" data-tab="form">FORM</button><button data-tab="optics">OPTICS</button><button data-tab="color">COLOR</button><button data-tab="motion">MOTION</button><button data-tab="export">EXPORT</button>
+</div>
+<section class="pane active" id="form"><h2>MATHEMATICAL ANATOMY</h2><div class="grid">
+<div class="control wide"><label for="mode">Engine</label><select id="mode"><option value="0">01 — Opal Mitosis · Soft implicit fusion</option><option value="1">02 — Resonance Bellies · Harmonic membrane</option><option value="2">03 — Pressure Garden · Interacting inflated cells</option></select></div>
+<div class="control"><label for="bulge">Deformation <output id="v-bulge"></output></label><input type="range" id="bulge" min="0" max="100"></div>
+<div class="control"><label for="count">Form count <output id="v-count"></output></label><input type="range" id="count" min="2" max="8" step="1"></div>
+<div class="control"><label for="merge">Fusion <output id="v-merge"></output></label><input type="range" id="merge" min="0" max="100"></div>
+</div><p>Three genuinely different geometry generators. Mitosis uses a smooth union of evolving signed-distance forms. Resonance uses angular harmonic modes. Pressure Garden moves discrete soft cells with mutual forces. These are artistic models, not calibrated fluids.</p></section>
+<section class="pane" id="optics"><h2>CHROMATIC PHANTOM MATERIAL</h2><div class="grid">
+<div class="control"><label for="milk">Milky centers <output id="v-milk"></output></label><input type="range" id="milk" min="0" max="100"></div>
+<div class="control"><label for="bloom">Soft fuzzy bloom <output id="v-bloom"></output></label><input type="range" id="bloom" min="0" max="100"></div>
+<div class="control"><label for="fringe">Spectral rim <output id="v-fringe"></output></label><input type="range" id="fringe" min="0" max="100"></div>
+<div class="control"><label for="pearl">Pearlescence <output id="v-pearl"></output></label><input type="range" id="pearl" min="0" max="100"></div>
+<div class="control"><label for="glow">Luminance <output id="v-glow"></output></label><input type="range" id="glow" min="0" max="100"></div>
+<div class="control"><label for="haze">Background echoes <output id="v-haze"></output></label><input type="range" id="haze" min="0" max="100"></div>
+</div><p>Soft halos, chromatic contours, surface normals and bright milky highlights respond to the mathematical shape. Approximate optical art, not physically accurate volumetric scattering.</p></section>
+<section class="pane" id="color"><h2>CHROMATIC CHOREOGRAPHY</h2><div class="grid">
+<div class="control wide"><label for="palette">Color family</label><select id="palette"></select><div class="swatches" id="swatches"></div></div>
+<div class="control"><label for="flow">Color travel <output id="v-flow"></output></label><input type="range" id="flow" min="0" max="100"></div>
+<div class="control"><label for="chroma">Saturation <output id="v-chroma"></output></label><input type="range" id="chroma" min="0" max="100"></div>
+<div class="control wide"><label for="hex">Import custom palette: JSON array of 2–8 hex colors</label><textarea id="hex" placeholder='["#2050ff","#a9cbff","#ffe1f7","#ff827d","#f245a3"]'></textarea><button id="importColor">Import without resetting geometry</button></div>
+</div><p>Built-in colors are starting specimens, not a claim that all your palettes have been imported. Custom arrays are stored with saved artwork.</p></section>
+<section class="pane" id="motion"><h2>TIME & DIRECT MANIPULATION</h2><div class="grid">
+<div class="control"><label for="speed">Morph speed <output id="v-speed"></output></label><input type="range" id="speed" min="0" max="100"></div>
+<div class="control"><label for="elastic">Pressure response <output id="v-elastic"></output></label><input type="range" id="elastic" min="0" max="100"></div>
+<div class="control"><label for="ratio">Aspect ratio</label><select id="ratio"><option value="1">1:1</option><option value="0.5625">9:16</option><option value="1.777778">16:9</option><option value="0.75">3:4</option><option value="1.333333">4:3</option></select></div>
+</div><p>Touch changes actual geometric state in Mitosis and Pressure Garden. In Resonance, touching excites a traveling disturbance. Geometry and animated colors share the same pause clock.</p></section>
+<section class="pane" id="export"><h2>EXPERIMENTS, SAVES & CAPTURE</h2><div class="quick"><button id="png2" class="primary">Export PNG</button><button id="json">Export state JSON</button><button id="jsonLoad">Import state JSON</button><input id="jsonFile" type="file" accept=".json,application/json" hidden></div><p>PNG is implemented. Animation export (high-quality GIF and real H.264 MP4) is a subsequent milestone. Stateful systems do not automatically make seamless loops; we'll validate closure instead of hiding cuts.</p></section>
+<div class="status" id="status" aria-live="polite"></div><footer>WebGL2 · iPhone-first · Offline-capable static app · Free GitHub Pages compatible · No Netlify or paid API dependency.</footer>
+</main>
 
+<script id="vert" type="x-shader/x-vertex">#version 300 es
+precision highp float;
+void main(){vec2 p=vec2((gl_VertexID<<1)&2,gl_VertexID&2);gl_Position=vec4(p*2.0-1.0,0,1);}
+</script>
+<script id="frag" type="x-shader/x-fragment">#version 300 es
+precision highp float;
+out vec4 outColor;
+uniform vec2 resolution;
+uniform float clockTime;
+uniform int shapeMode,formCount;
+uniform vec4 balls[8];
+uniform vec3 colors[6],touch;
+uniform float deform,fusion,milk,bloom,fringe,pearl,glow,haze,flow,chroma;
+float smin(float a,float b,float k){float h=max(k-abs(a-b),0.0)/max(k,0.00001);return min(a,b)-h*h*k*0.25;}
+float field(vec2 p){
+if(shapeMode==1){
+float a=atan(p.y,p.x),r=length(p);
+float w=.093*sin(5.0*a+clockTime*1.18)+.049*cos(9.0*a-clockTime*1.52)+.031*sin(3.0*a+clockTime*.63);
+float wave=touch.z*.035*sin(26.0*length(p-touch.xy)-6.0*clockTime)*exp(-4.0*length(p-touch.xy));
+return r-(.368+deform*w+wave);
+}
+float d=3.0;
+for(int i=0;i<8;i++){
+if(i>=formCount)break;
+vec4 q=balls[i];vec2 center=q.xy;
+if(shapeMode==0)center+=.048*deform*vec2(sin(clockTime*(.71+q.w*.2)+q.w*6.0),cos(clockTime*(.59+q.w*.24)+q.w*4.0));
+float di=length(p-center)-q.z*(1.0+deform*.10*sin(clockTime+q.w*6.28));
+if(shapeMode==0)d=smin(d,di,.055+.21*fusion);else d=min(d,di);
+}
+return d;
+}
+float seam(vec2 p){
+if(shapeMode!=2)return 0.0;
+float a=5.0,b=5.0;
+for(int i=0;i<8;i++){if(i>=formCount)break;float x=length(p-balls[i].xy)-balls[i].z;if(x<a){b=a;a=x;}else if(x<b)b=x;}
+return exp(-30.0*abs(b-a))*smoothstep(.10,-.13,a);
+}
+vec3 ramp(float x){
+float v=clamp(x,0.0,.9999)*5.0;int n=int(v);vec3 a=colors[0],b=colors[5];
+for(int i=0;i<5;i++){if(n==i){a=colors[i];b=colors[i+1];}}
+float w=fract(v);w=w*w*(3.0-2.0*w);return pow(mix(a,b,w),vec3(2.2));
+}
+void main(){
+vec2 p=(gl_FragCoord.xy-.5*resolution)/min(resolution.x,resolution.y);
+float d=field(p),e=.0025;
+vec2 g=vec2(field(p+vec2(e,0.0))-field(p-vec2(e,0.0)),field(p+vec2(0.0,e))-field(p-vec2(0.0,e)))/(2.0*e);
+vec3 n=normalize(vec3(-g*.82,1.0));
+float lit=max(dot(n,normalize(vec3(-.63,.65,1.15))),0.0);
+float inside=smoothstep(.022,-.13,d);
+float edge=exp(-abs(d+.015)*40.0);
+float aura=exp(-max(d,0.0)*(12.0-6.0*bloom));
+float a=atan(p.y,p.x);
+float phase=.48+.19*sin(5.4*p.x-3.4*p.y+clockTime*flow*.6)+.2*cos(4.3*p.y+2.3*a-clockTime*flow*.4);
+vec3 pigment=ramp(clamp(phase+.12*cos(18.0*d-2.3*a),0.0,1.0));
+float gray=dot(pigment,vec3(.2126,.7152,.0722));
+pigment=mix(vec3(gray),pigment,.2+1.18*chroma);
+vec3 milky=vec3(.99,.91,.98);
+float white=inside*(.2+.55*milk)*smoothstep(-.025,-.26,d)*(.6+.55*lit);
+vec3 body=mix(pigment,milky,clamp(white,0.0,.89))*(.55+.58*lit);
+vec3 rim=ramp(clamp(.16+.66*(.5+.5*sin(a*3.9+clockTime*flow*.3)),0.0,1.0));
+vec3 sum=body*smoothstep(.052,-.05,d);
+sum+=rim*edge*(.27+.67*fringe);
+sum+=ramp(.83)*seam(p)*.2;
+sum+=milky*pow(lit,8.0)*inside*pearl*.62;
+float echoes=exp(-pow(length(p-vec2(-.32,.35))*1.55,2.0))*.025+exp(-pow(length(p-vec2(.38,-.31))*1.7,2.0))*.028;
+vec3 back=vec3(.001,.001,.005)+ramp(.22)*echoes*haze;
+sum+=rim*aura*(.025+.085*bloom);
+sum+=ramp(.13)*exp(-max(d,0.0)*5.2)*bloom*.033;
+vec3 lightColor=back+sum*(.68+glow*.78);
+lightColor=vec3(1.0)-exp(-max(lightColor,vec3(0.0))*1.4);
+outColor=vec4(pow(clamp(lightColor,0.0,1.0),vec3(1.0/2.2)),1.0);
+}
+</script>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const palettes={
+'Video Ghost':['#2050ff','#4da0ff','#a9cbff','#ffe1f7','#ff827d','#f245a3'],
+'Ghost Marshmallow':['#28127c','#6c59fc','#cbc0ff','#ffecfc','#ff93bf','#d232ad'],
+'Radioactive Sorbet':['#ec482f','#ffb260','#ffefc1','#6dffd2','#258eff','#602bdc'],
+'Opal Bruise':['#061d61','#287ee6','#c3eaff','#eed4ff','#c471f8','#ec348b'],
+'Alien Milk':['#174b3c','#32ed81','#d9ffda','#f2baf2','#8061ff','#26166d'],
+'Coral Cyan':['#1833ce','#22cbfa','#a8f5fd','#fff0ed','#ff9a92','#ff3d37'],
+'Ultraviolet Sherbet':['#291c69','#6a50ef','#fbc8ff','#fff3cd','#ffa059','#f85179']
+};
+const fresh=()=>({mode:0,seed:18719,palette:'Video Ghost',custom:null,ratio:'1',bulge:58,count:6,merge:62,milk:78,bloom:75,fringe:48,pearl:72,glow:81,haze:34,flow:42,chroma:83,speed:36,elastic:64,play:true,time:0,balls:[],touch:[0,0,0]});
+const clone=v=>JSON.parse(JSON.stringify(v));
+const keys=['bulge','count','merge','milk','bloom','fringe','pearl','glow','haze','flow','chroma','speed','elastic'];
+let state=fresh(),history=[],future=[],gesture=null,gl,program,vao,uniform={},last=0,accumulator=0,redraw=true;
+const canvas=$('art');
+function random(seed){let x=(seed|0)||1;return()=>{x^=x<<13;x^=x>>>17;x^=x<<5;return (x>>>0)/4294967296;};}
+function createBalls(){const rand=random(state.seed);state.balls=Array.from({length:8},(_,i)=>{let angle=i*2.39996+rand()*.6,rad=i===0?0:.15+Math.sqrt(i/8)*.23;return [rad*Math.cos(angle),rad*Math.sin(angle),.16+.06*rand(),rand()];});}
+function palette(){return state.custom||palettes[state.palette]||palettes['Video Ghost'];}
+function checkpoint(){history.push(clone(state));if(history.length>35)history.shift();future=[];}
+function notice(s){$('status').textContent=s;clearTimeout(notice.timer);notice.timer=setTimeout(()=>$('status').textContent='',3000);}
+function updateUI(){
+keys.forEach(k=>{$(k).value=state[k];$('v-'+k).textContent=state[k]+(k==='count'?'':'%');});
+$('mode').value=state.mode;$('palette').value=state.custom?'Imported':state.palette;$('ratio').value=state.ratio;
+$('play').textContent=state.play?'Ⅱ Pause':'▶ Play';
+$('stamp').textContent=['OPAL MITOSIS','RESONANCE BELLIES','PRESSURE GARDEN'][state.mode];
+canvas.style.setProperty('--aspect',Number(state.ratio));
+$('swatches').replaceChildren(...palette().map(c=>{let el=document.createElement('span');el.style.background=c;return el;}));
+$('undo').disabled=history.length===0;$('redo').disabled=future.length===0;redraw=true;
+}
+const select=$('palette');Object.keys(palettes).forEach(name=>{let o=document.createElement('option');o.value=name;o.textContent=name;select.append(o);});let o=document.createElement('option');o.value='Imported';o.textContent='Imported palette';select.append(o);
+function shader(type,id){let s=gl.createShader(type);gl.shaderSource(s,$(id).textContent);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(s));return s;}
+function init(){
+gl=canvas.getContext('webgl2',{alpha:false,antialias:false,preserveDrawingBuffer:true});
+if(!gl)throw Error('WebGL2 is unavailable on this browser.');
+program=gl.createProgram();const a=shader(gl.VERTEX_SHADER,'vert'),b=shader(gl.FRAGMENT_SHADER,'frag');gl.attachShader(program,a);gl.attachShader(program,b);gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(program));gl.deleteShader(a);gl.deleteShader(b);gl.useProgram(program);vao=gl.createVertexArray();gl.bindVertexArray(vao);
+['resolution','clockTime','shapeMode','formCount','balls[0]','colors[0]','touch','deform','fusion','milk','bloom','fringe','pearl','glow','haze','flow','chroma'].forEach(k=>uniform[k]=gl.getUniformLocation(program,k));
+}
+function col(hex){return [1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255);}
+function draw(scale=1){
+if(!gl)return;const dpr=Math.min(devicePixelRatio||1,1.7)*scale,max=Math.min(4096,gl.getParameter(gl.MAX_TEXTURE_SIZE));
+let w=Math.round(canvas.clientWidth*dpr),h=Math.round(canvas.clientHeight*dpr),f=Math.min(1,max/Math.max(w,h));w=Math.max(2,Math.round(w*f));h=Math.max(2,Math.round(h*f));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}gl.viewport(0,0,w,h);gl.useProgram(program);
+gl.uniform2f(uniform.resolution,w,h);gl.uniform1f(uniform.clockTime,state.time);
+gl.uniform1i(uniform.shapeMode,Number(state.mode));gl.uniform1i(uniform.formCount,Number(state.count));
+gl.uniform4fv(uniform['balls[0]'],new Float32Array(state.balls.flat()));
+let cs=palette();gl.uniform3fv(uniform['colors[0]'],new Float32Array(Array.from({length:6},(_,i)=>col(cs[Math.round(i*(cs.length-1)/5)])).flat()));
+gl.uniform3fv(uniform.touch,new Float32Array(state.touch));
+for(let [u,key] of [['deform','bulge'],['fusion','merge'],['milk','milk'],['bloom','bloom'],['fringe','fringe'],['pearl','pearl'],['glow','glow'],['haze','haze'],['flow','flow'],['chroma','chroma']])gl.uniform1f(uniform[u],Number(state[key])/100);
+gl.drawArrays(gl.TRIANGLES,0,3);redraw=false;
+}
+function tick(dt){
+state.time+=dt*(.3+state.speed/70);
+if(Number(state.mode)===2){
+for(let i=0;i<state.count;i++){
+if(gesture&&gesture.index===i)continue;
+let q=state.balls[i],a=i*2.39996,targ=i===0?0:Math.sqrt(i/8)*.31;
+let fx=(Math.cos(a)*targ-q[0])*.65,fy=(Math.sin(a)*targ-q[1])*.65;
+for(let j=0;j<state.count;j++){if(i===j)continue;let b=state.balls[j],dx=q[0]-b[0],dy=q[1]-b[1],d=Math.hypot(dx,dy)+.0001,rest=(q[2]+b[2])*.83;if(d<rest){let strength=(rest-d)*3;fx+=dx/d*strength;fy+=dy/d*strength;}}
+q[0]+=Math.max(-.02,Math.min(.02,fx*dt*(state.elastic/85)));q[1]+=Math.max(-.02,Math.min(.02,fy*dt*(state.elastic/85)));
+}
+}
+state.touch[2]=Math.max(0,state.touch[2]-dt*.35);
+}
+function frame(t){
+if(!last)last=t;let dt=Math.min(.05,Math.max(0,(t-last)/1000));last=t;
+if(state.play){accumulator+=dt;let steps=0;while(accumulator>=1/60&&steps<4){tick(1/60);accumulator-=1/60;steps++;}redraw=true;}
+if(redraw)try{draw();}catch(e){fail(e.message);state.play=false;}
+requestAnimationFrame(frame);
+}
+function fail(message){$('error').style.display='block';$('error').textContent='Renderer error: '+message;}
+keys.forEach(k=>{let el=$(k);el.addEventListener('pointerdown',checkpoint);el.addEventListener('input',()=>{state[k]=Number(el.value);$('v-'+k).textContent=state[k]+(k==='count'?'':'%');redraw=true;});el.addEventListener('change',updateUI);});
+$('mode').onchange=e=>{checkpoint();state.mode=Number(e.target.value);updateUI();};
+$('ratio').onchange=e=>{checkpoint();state.ratio=e.target.value;updateUI();};
+select.onchange=e=>{if(e.target.value==='Imported'&&!state.custom){updateUI();notice('Import a custom color array below first.');return;}checkpoint();state.palette=e.target.value;updateUI();};
+$('importColor').onclick=()=>{try{let colors=JSON.parse($('hex').value);if(!Array.isArray(colors)||colors.length<2||colors.length>8||!colors.every(c=>typeof c==='string'&&/^#[0-9a-f]{6}$/i.test(c)))throw Error('Use 2–8 valid #RRGGBB colors.');checkpoint();state.custom=colors;state.palette='Imported';updateUI();notice('New colors installed. Geometry is untouched.');}catch(e){notice('Palette error: '+e.message);}};
+$('play').onclick=()=>{state.play=!state.play;updateUI();};
+$('undo').onclick=()=>{if(!history.length)return;future.push(clone(state));state=history.pop();updateUI();};
+$('redo').onclick=()=>{if(!future.length)return;history.push(clone(state));state=future.pop();updateUI();};
+$('seed').onclick=()=>{checkpoint();state.seed=(Math.random()*2147483647)|0;createBalls();updateUI();};
+$('surprise').onclick=()=>{checkpoint();let x=(Math.random()*2147483647)|0,r=random(x);state.seed=x;state.mode=Math.floor(r()*3);let p=Object.keys(palettes);state.palette=p[Math.floor(r()*p.length)];state.custom=null;keys.filter(k=>k!=='count').forEach(k=>state[k]=Math.round(20+r()*80));state.count=3+Math.floor(r()*6);createBalls();updateUI();notice('Surprise! Everything is still editable.');};
+$('new').onclick=()=>{if(!confirm('Start a new design? Undo can restore the current one.'))return;checkpoint();state=fresh();state.seed=(Math.random()*2147483647)|0;createBalls();updateUI();};
+$('save').onclick=()=>{try{localStorage.setItem('chromatic-phantom-v1',JSON.stringify(state));notice('Saved locally on this device.');}catch(e){notice('Save failed: '+e.message);}};
+function valid(s){return s&&[0,1,2].includes(Number(s.mode))&&Array.isArray(s.balls)&&s.balls.length===8&&s.balls.every(b=>Array.isArray(b)&&b.length===4&&b.every(Number.isFinite));}
+$('load').onclick=()=>{try{let x=JSON.parse(localStorage.getItem('chromatic-phantom-v1')||'null');if(!valid(x))throw Error('No valid saved art found.');checkpoint();state={...fresh(),...x};updateUI();notice('Saved design restored.');}catch(e){notice(e.message);}};
+function download(name,blob){let u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);}
+function exportJSON(){download('chromatic-phantom-'+state.seed+'.json',new Blob([JSON.stringify({schema:'chromatic-phantom/v1',...state},null,2)],{type:'application/json'}));}
+$('json').onclick=exportJSON;
+$('jsonLoad').onclick=()=>$('jsonFile').click();
+$('jsonFile').onchange=async e=>{try{let file=e.target.files[0];if(!file)return;let x=JSON.parse(await file.text());if(!valid(x))throw Error('Invalid form-state data');checkpoint();state={...fresh(),...x};updateUI();notice('Imported editable artwork.');}catch(err){notice('Import error: '+err.message);}e.target.value='';};
+function exportPNG(){
+let oldW=canvas.width,oldH=canvas.height;try{draw(1.75);let a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download='chromatic-phantom-'+state.seed+'.png';document.body.append(a);a.click();a.remove();notice('PNG exported.');}catch(e){notice('PNG export failed: '+e.message);}finally{canvas.width=oldW;canvas.height=oldH;redraw=true;}
+}
+$('png').onclick=exportPNG;$('png2').onclick=exportPNG;
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(t=>t.classList.toggle('active',t===b));document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('active',p.id===b.dataset.tab));});
+function point(e){let r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;return [(x-.5)*r.width/Math.min(r.width,r.height),(.5-y)*r.height/Math.min(r.width,r.height)];}
+canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);let p=point(e);checkpoint();if(Number(state.mode)===1){state.touch=[p[0],p[1],1];gesture={id:e.pointerId,mode:1};}else{let best=0,dist=Infinity;for(let i=0;i<state.count;i++){let b=state.balls[i],d=Math.hypot(p[0]-b[0],p[1]-b[1]);if(d<dist){dist=d;best=i;}}gesture={id:e.pointerId,mode:state.mode,index:best};state.balls[best][0]=p[0];state.balls[best][1]=p[1];}redraw=true;});
+canvas.addEventListener('pointermove',e=>{if(!gesture||e.pointerId!==gesture.id)return;let p=point(e);if(Number(gesture.mode)===1)state.touch=[p[0],p[1],1];else{state.balls[gesture.index][0]=p[0];state.balls[gesture.index][1]=p[1];}redraw=true;});
+function release(e){if(gesture&&gesture.id===e.pointerId){gesture=null;updateUI();}}
+canvas.addEventListener('pointerup',release);
+canvas.addEventListener('pointercancel',e=>{if(gesture&&gesture.id===e.pointerId&&history.length){state=history.pop();future=[];}release(e);});
+canvas.addEventListener('lostpointercapture',release);
+canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();state.play=false;fail('WebGL context lost. Reload to restore graphics; saved artwork remains intact.');});
+window.addEventListener('resize',()=>redraw=true);
+createBalls();if(matchMedia('(prefers-reduced-motion: reduce)').matches)state.play=false;
+try{init();updateUI();requestAnimationFrame(frame);}catch(e){fail(e.message);console.error(e);}
+})();
+</script>
+</body></html>
