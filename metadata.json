@@ -1,6 +1,6 @@
 {
-  "name": "Blank Slate",
-  "description": "A clean starting workspace ready to build from.",
+  "name": "Chromatic Phantom",
+  "description": "Touch-sculpted mathematical morphologies with milky chromatic optics. Static WebGL2 app.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": []
 }
