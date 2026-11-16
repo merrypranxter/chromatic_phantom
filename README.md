@@ -17,7 +17,7 @@ This project is a **static, single-file HTML/WebGL2 app**, with no external asse
 
 https://merrypranxter.github.io/chromatic_phantom/
 
-This is a prospective URL, not a claim Pages is currently enabled. The root \`index.html\` is the actual app. You can also run \`npm install && npm run dev\` with the optional Vite configuration.
+This is a prospective URL, not a claim Pages is currently enabled. The root `index.html` is the actual app. You can also run `npm install && npm run dev` with the optional Vite configuration.
 
 **No Netlify action was invoked to build this app.** If this repository was previously linked to Netlify automatic deploys, manage that separately in its settings.
 
@@ -27,7 +27,7 @@ This phase models **optical appearance artistically**, using GLSL distance field
 
 PNG export is real. **GIF and MP4 exports are not yet implemented** and are on the roadmap. A saved state captures model parameters, positions, palette, and clock; a deterministic seed does not make arbitrary stateful pressure trajectories exact loops.
 
-Mobile performance and iPhone Safari rendering still need real-device verification. The app uses WebGL2 and honors \`prefers-reduced-motion\`.
+Mobile performance and iPhone Safari rendering still need real-device verification. The app uses WebGL2 and honors `prefers-reduced-motion`.
 
 ## Roadmap
 
