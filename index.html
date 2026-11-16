@@ -81,7 +81,7 @@ float seam(vec2 p){
 if(shapeMode!=2)return 0.0;
 float a=5.0,b=5.0;
 for(int i=0;i<8;i++){if(i>=formCount)break;float x=length(p-balls[i].xy)-balls[i].z;if(x<a){b=a;a=x;}else if(x<b)b=x;}
-return exp(-30.0*abs(b-a))*smoothstep(.10,-.13,a);
+return exp(-30.0*abs(b-a))*(1.0-smoothstep(-.13,.10,a));
 }
 vec3 ramp(float x){
 float v=clamp(x,0.0,.9999)*5.0;int n=int(v);vec3 a=colors[0],b=colors[5];
@@ -94,7 +94,7 @@ float d=field(p),e=.0025;
 vec2 g=vec2(field(p+vec2(e,0.0))-field(p-vec2(e,0.0)),field(p+vec2(0.0,e))-field(p-vec2(0.0,e)))/(2.0*e);
 vec3 n=normalize(vec3(-g*.82,1.0));
 float lit=max(dot(n,normalize(vec3(-.63,.65,1.15))),0.0);
-float inside=smoothstep(.022,-.13,d);
+float inside=(1.0-smoothstep(-.13,.022,d));
 float edge=exp(-abs(d+.015)*40.0);
 float aura=exp(-max(d,0.0)*(12.0-6.0*bloom));
 float a=atan(p.y,p.x);
@@ -103,10 +103,10 @@ vec3 pigment=ramp(clamp(phase+.12*cos(18.0*d-2.3*a),0.0,1.0));
 float gray=dot(pigment,vec3(.2126,.7152,.0722));
 pigment=mix(vec3(gray),pigment,.2+1.18*chroma);
 vec3 milky=vec3(.99,.91,.98);
-float white=inside*(.2+.55*milk)*smoothstep(-.025,-.26,d)*(.6+.55*lit);
+float white=inside*(.2+.55*milk)*(1.0-smoothstep(-.26,-.025,d))*(.6+.55*lit);
 vec3 body=mix(pigment,milky,clamp(white,0.0,.89))*(.55+.58*lit);
 vec3 rim=ramp(clamp(.16+.66*(.5+.5*sin(a*3.9+clockTime*flow*.3)),0.0,1.0));
-vec3 sum=body*smoothstep(.052,-.05,d);
+vec3 sum=body*(1.0-smoothstep(-.05,.052,d));
 sum+=rim*edge*(.27+.67*fringe);
 sum+=ramp(.83)*seam(p)*.2;
 sum+=milky*pow(lit,8.0)*inside*pearl*.62;
@@ -194,7 +194,7 @@ function fail(message){$('error').style.display='block';$('error').textContent='
 keys.forEach(k=>{let el=$(k);el.addEventListener('pointerdown',checkpoint);el.addEventListener('input',()=>{state[k]=Number(el.value);$('v-'+k).textContent=state[k]+(k==='count'?'':'%');redraw=true;});el.addEventListener('change',updateUI);});
 $('mode').onchange=e=>{checkpoint();state.mode=Number(e.target.value);updateUI();};
 $('ratio').onchange=e=>{checkpoint();state.ratio=e.target.value;updateUI();};
-select.onchange=e=>{if(e.target.value==='Imported'&&!state.custom){updateUI();notice('Import a custom color array below first.');return;}checkpoint();state.palette=e.target.value;updateUI();};
+select.onchange=e=>{if(e.target.value==='Imported'&&!state.custom){updateUI();notice('Import a custom color array below first.');return;}checkpoint();state.palette=e.target.value;if(state.palette!=='Imported')state.custom=null;updateUI();};
 $('importColor').onclick=()=>{try{let colors=JSON.parse($('hex').value);if(!Array.isArray(colors)||colors.length<2||colors.length>8||!colors.every(c=>typeof c==='string'&&/^#[0-9a-f]{6}$/i.test(c)))throw Error('Use 2–8 valid #RRGGBB colors.');checkpoint();state.custom=colors;state.palette='Imported';updateUI();notice('New colors installed. Geometry is untouched.');}catch(e){notice('Palette error: '+e.message);}};
 $('play').onclick=()=>{state.play=!state.play;updateUI();};
 $('undo').onclick=()=>{if(!history.length)return;future.push(clone(state));state=history.pop();updateUI();};
