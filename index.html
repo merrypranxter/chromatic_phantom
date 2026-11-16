@@ -149,7 +149,7 @@ $('play').textContent=state.play?'Ⅱ Pause':'▶ Play';
 $('stamp').textContent=['OPAL MITOSIS','RESONANCE BELLIES','PRESSURE GARDEN'][state.mode];
 canvas.style.setProperty('--aspect',Number(state.ratio));
 $('swatches').replaceChildren(...palette().map(c=>{let el=document.createElement('span');el.style.background=c;return el;}));
-$('undo').disabled=history.length===0;$('redo').disabled=future.length===0;redraw=true;
+$('undo').disabled=history.length===0;$('redo').disabled=future.length===0;$('count').disabled=Number(state.mode)===1;$('merge').disabled=Number(state.mode)!==0;$('elastic').disabled=Number(state.mode)!==2;redraw=true;
 }
 const select=$('palette');Object.keys(palettes).forEach(name=>{let o=document.createElement('option');o.value=name;o.textContent=name;select.append(o);});let o=document.createElement('option');o.value='Imported';o.textContent='Imported palette';select.append(o);
 function shader(type,id){let s=gl.createShader(type);gl.shaderSource(s,$(id).textContent);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(s));return s;}
@@ -166,7 +166,7 @@ let w=Math.round(canvas.clientWidth*dpr),h=Math.round(canvas.clientHeight*dpr),f
 gl.uniform2f(uniform.resolution,w,h);gl.uniform1f(uniform.clockTime,state.time);
 gl.uniform1i(uniform.shapeMode,Number(state.mode));gl.uniform1i(uniform.formCount,Number(state.count));
 gl.uniform4fv(uniform['balls[0]'],new Float32Array(state.balls.flat()));
-let cs=palette();gl.uniform3fv(uniform['colors[0]'],new Float32Array(Array.from({length:6},(_,i)=>col(cs[Math.round(i*(cs.length-1)/5)])).flat()));
+let cs=palette();gl.uniform3fv(uniform['colors[0]'],new Float32Array(Array.from({length:6},(_,i)=>{let pos=i*(cs.length-1)/5,j=Math.floor(pos),f=pos-j,a=col(cs[j]),b=col(cs[Math.min(j+1,cs.length-1)]);return a.map((v,k)=>v+(b[k]-v)*f);}).flat()));
 gl.uniform3fv(uniform.touch,new Float32Array(state.touch));
 for(let [u,key] of [['deform','bulge'],['fusion','merge'],['milk','milk'],['bloom','bloom'],['fringe','fringe'],['pearl','pearl'],['glow','glow'],['haze','haze'],['flow','flow'],['chroma','chroma']])gl.uniform1f(uniform[u],Number(state[key])/100);
 gl.drawArrays(gl.TRIANGLES,0,3);redraw=false;
